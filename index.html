@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 24 Study Boxes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-top">
+                <h1 class="app-title">📚 24 Study Boxes</h1>
+                <div class="header-controls">
+                    <button class="btn-icon" id="themeToggle" title="تبديل الوضع">🌙</button>
+                    <button class="btn-icon" id="statsBtn" title="الإحصائيات">📊</button>
+                </div>
+            </div>
+
+            <!-- Date and Stats -->
+            <div class="date-section">
+                <p class="date-display">📅 <span id="currentDate"></span></p>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="quick-stats">
+                <div class="stat-box">
+                    <span class="stat-label">المربعات المكتملة</span>
+                    <span class="stat-value"><span id="completedCount">0</span> / 24</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">النتيجة</span>
+                    <span class="stat-value"><span id="scoreDisplay">0</span> / 100</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">الإنجاز</span>
+                    <span class="stat-value"><span id="percentageDisplay">0</span>%</span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-section">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p class="progress-text" id="progressText">0 / 24 ساعة</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Boxes Grid -->
+            <div class="boxes-container">
+                <div class="boxes-grid" id="boxesGrid"></div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn-primary" id="completeBtn">✅ إكمال اليوم</button>
+                <button class="btn-secondary" id="resetBtn">↻ إعادة تعيين اليوم</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Box Detail Modal -->
+    <div class="modal" id="boxModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="boxTitle">المربع رقم 1</h2>
+                <button class="btn-close" id="closeModal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Time Display -->
+                <div class="modal-section">
+                    <label class="section-label">الساعة</label>
+                    <p class="time-display" id="timeDisplay">00:00 - 01:00</p>
+                </div>
+
+                <!-- Status Selection -->
+                <div class="modal-section">
+                    <label class="section-label">الحالة</label>
+                    <div class="status-buttons">
+                        <button class="status-btn" data-status="empty" title="لم أدرس">⬜</button>
+                        <button class="status-btn" data-status="studied" title="تمت الدراسة">🟩</button>
+                        <button class="status-btn" data-status="reviewed" title="تمت المراجعة">🟦</button>
+                        <button class="status-btn" data-status="mcq" title="تم حل MCQ">🟪</button>
+                        <button class="status-btn" data-status="partial" title="دراسة جزئية">🟨</button>
+                    </div>
+                </div>
+
+                <!-- Activity Type -->
+                <div class="modal-section">
+                    <label class="section-label">نوع النشاط</label>
+                    <div class="activity-buttons">
+                        <button class="activity-btn" data-activity="reading">📖 قراءة</button>
+                        <button class="activity-btn" data-activity="review">🔄 مراجعة</button>
+                        <button class="activity-btn" data-activity="mcq">❓ MCQ</button>
+                        <button class="activity-btn" data-activity="memorize">🧠 حفظ</button>
+                        <button class="activity-btn" data-activity="lecture">🎓 محاضرة</button>
+                    </div>
+                </div>
+
+                <!-- Subject/Task Name -->
+                <div class="modal-section">
+                    <label class="section-label" for="subjectInput">المادة / المهمة</label>
+                    <input type="text" id="subjectInput" class="input-field" placeholder="أدخل اسم المادة أو المهمة">
+                </div>
+
+                <!-- Notes -->
+                <div class="modal-section">
+                    <label class="section-label" for="notesInput">ملاحظات</label>
+                    <textarea id="notesInput" class="input-field textarea-field" placeholder="أضف ملاحظاتك..."></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" id="cancelBtn">إلغاء</button>
+                <button class="btn-save" id="saveBtn">💾 حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complete Day Modal -->
+    <div class="modal" id="completeDayModal">
+        <div class="modal-content complete-modal">
+            <div class="modal-header">
+                <h2>🎯 إنجاز اليوم</h2>
+            </div>
+            
+            <div class="modal-body">
+                <div class="complete-summary">
+                    <div class="progress-visual">
+                        <div class="progress-bar large">
+                            <div class="progress-fill" id="completeDayProgressFill"></div>
+                        </div>
+                    </div>
+
+                    <div class="summary-stats">
+                        <div class="summary-stat">
+                            <span class="summary-label">المربعات المكتملة</span>
+                            <span class="summary-value"><span id="completeDayBoxes">0</span> / 24</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-label">النتيجة</span>
+                            <span class="summary-value"><span id="completeDayScore">0</span> / 100</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-label">ساعات الدراسة</span>
+                            <span class="summary-value"><span id="completeDayHours">0</span> ساعة</span>
+                        </div>
+                    </div>
+
+                    <p class="completion-message" id="completionMessage">🔥 استمر!</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-primary" id="closeCompleteBtn">حسناً</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content confirm-modal">
+            <div class="modal-header">
+                <h2>تأكيد العملية</h2>
+            </div>
+            
+            <div class="modal-body">
+                <p id="confirmMessage">هل أنت متأكد؟ سيتم مسح إنجازات اليوم.</p>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" id="confirmCancel">إلغاء</button>
+                <button class="btn-danger" id="confirmOk">تأكيد</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Modal -->
+    <div class="modal" id="statsModal">
+        <div class="modal-content stats-modal">
+            <div class="modal-header">
+                <h2>📊 الإحصائيات</h2>
+                <button class="btn-close" id="closeStatsModal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- General Stats -->
+                <div class="stats-section">
+                    <h3 class="stats-title">الإحصائيات العامة</h3>
+                    <div class="stats-grid">
+                        <div class="stats-item">
+                            <span class="stats-icon">📊</span>
+                            <span class="stats-label">مجموع المربعات</span>
+                            <span class="stats-value" id="totalBoxes">0</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-icon">📚</span>
+                            <span class="stats-label">مجموع الساعات</span>
+                            <span class="stats-value" id="totalHours">0</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-icon">🏆</span>
+                            <span class="stats-label">أفضل يوم</span>
+                            <span class="stats-value" id="bestDay">0</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-icon">📈</span>
+                            <span class="stats-label">المتوسط اليومي</span>
+                            <span class="stats-value" id="avgDaily">0%</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-icon">🔥</span>
+                            <span class="stats-label">السلسلة المتتالية</span>
+                            <span class="stats-value" id="streak">0</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-icon">📅</span>
+                            <span class="stats-label">عدد الأيام</span>
+                            <span class="stats-value" id="totalDays">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily History -->
+                <div class="stats-section">
+                    <h3 class="stats-title">سجل الأيام</h3>
+                    <div class="history-list" id="historyList">
+                        <p class="empty-history">لا توجد بيانات بعد</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-primary" id="closeStatsBtn">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay for modals -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
